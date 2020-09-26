@@ -159,9 +159,9 @@ func main() {
 	sort.Sort(cli.FlagsByName(appFlags))
 
 	app := &cli.App{
-		Name:      "container-web-tty",
-		Usage:     "connect your containers via a web-tty",
-		UsageText: "container-web-tty [global options]",
+		Name:      "console",
+		Usage:     "connect your containers via a web-console",
+		UsageText: "console [global options]",
 		Flags:     appFlags,
 		HideHelp:  true,
 		Authors:   author,

@@ -67,6 +67,7 @@ proto:
 asset: clear static/js static/css static/html
 	bindata \
 		-pkg $(PKG)/route/asset \
+		-prefix /console/ \
 		-src static/
 
 clear:

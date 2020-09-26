@@ -30,6 +30,7 @@ require (
 	github.com/sirupsen/logrus v1.4.0
 	github.com/spf13/pflag v1.0.3 // indirect
 	github.com/ugorji/go/codec v0.0.0-20190320090025-2dc34c0b8780 // indirect
+	github.com/wrfly/bindata v0.0.0-20191225080400-3b40fb72d868 // indirect
 	github.com/wrfly/ecp v0.1.1-0.20190725160759-97269b9e95f0
 	github.com/wrfly/pubsub v0.0.0-20200314104228-47828c5578b6
 	github.com/yudai/gotty v2.0.0-alpha.3+incompatible

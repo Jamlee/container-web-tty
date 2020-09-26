@@ -127,50 +127,52 @@ func (server *Server) Run(ctx context.Context, options ...RunOption) error {
 	}
 
 	// Routes
-	router.GET("/", server.handleListContainers)
-	router.GET("/auth_token.js", server.handleAuthToken)
-	router.GET("/config.js", server.handleConfig)
+	router.GET("/console", server.handleListContainers)
+	router.GET("/console/auth_token.js", server.handleAuthToken)
+	router.GET("/console/config.js", server.handleConfig)
+
+	router.GET("/console/list_container_json", server.handleListContainersJson)
 
 	h := gin.WrapF(asset.Handler)
 	for _, f := range asset.List() {
-		if f.Name() != "/" {
+		if f.Name() != "/console" {
 			router.GET(f.Name(), h)
 		}
 	}
 
 	// exec
 	counter := newCounter(server.options.IdleTime)
-	router.GET("/e/:cid/", server.handleExecRedirect) // containerID
-	router.GET("/exec/:eid/", server.handleWSIndex)   // execID
-	router.GET("/exec/:eid/"+"ws", func(c *gin.Context) { server.handleExec(c, counter) })
+	router.GET("/console/e/:cid/", server.handleExecRedirect) // containerID
+	router.GET("/console/exec/:eid/", server.handleWSIndex)   // execID
+	router.GET("/console/exec/:eid/"+"ws", func(c *gin.Context) { server.handleExec(c, counter) })
 
 	// logs
-	router.GET("/logs/:cid/", server.handleWSIndex)
-	router.GET("/logs/:cid/"+"ws", func(c *gin.Context) { server.handleLogs(c) })
+	router.GET("/console/logs/:cid/", server.handleWSIndex)
+	router.GET("/console/logs/:cid/"+"ws", func(c *gin.Context) { server.handleLogs(c) })
 
 	ctl := server.options.Control
 	if ctl.Enable {
 		// container actions: start|stop|restart
 		containerG := router.Group("/container")
 		if ctl.Start || ctl.All {
-			containerG.POST("/start/:id", server.handleStartContainer)
+			containerG.POST("/console/start/:id", server.handleStartContainer)
 		}
 		if ctl.Stop || ctl.All {
-			containerG.POST("/stop/:id", server.handleStopContainer)
+			containerG.POST("/console/stop/:id", server.handleStopContainer)
 		}
 		if ctl.Restart || ctl.All {
-			containerG.POST("/restart/:id", server.handleRestartContainer)
+			containerG.POST("/console/restart/:id", server.handleRestartContainer)
 		}
 	}
 
 	// pprof
 	rootMux := http.NewServeMux()
 	if log.GetLevel() == log.DebugLevel {
-		rootMux.HandleFunc("/debug/pprof/", pprof.Index)
-		rootMux.HandleFunc("/debug/pprof/cmdline", pprof.Cmdline)
-		rootMux.HandleFunc("/debug/pprof/profile", pprof.Profile)
-		rootMux.HandleFunc("/debug/pprof/symbol", pprof.Symbol)
-		rootMux.HandleFunc("/debug/pprof/trace", pprof.Trace)
+		rootMux.HandleFunc("/console/debug/pprof/", pprof.Index)
+		rootMux.HandleFunc("/console/debug/pprof/cmdline", pprof.Cmdline)
+		rootMux.HandleFunc("/console/debug/pprof/profile", pprof.Profile)
+		rootMux.HandleFunc("/console/debug/pprof/symbol", pprof.Symbol)
+		rootMux.HandleFunc("/console/debug/pprof/trace", pprof.Trace)
 	}
 	rootMux.Handle("/", router)
 

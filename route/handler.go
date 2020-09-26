@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 
 	"github.com/gin-gonic/gin"
@@ -62,6 +63,11 @@ func (server *Server) handleListContainers(c *gin.Context) {
 	}
 
 	c.Writer.Write(listBuf.Bytes())
+}
+
+func (server *Server) handleListContainersJson(c *gin.Context) {
+	arr := server.containerCli.List(c.Request.Context())
+	c.JSON(http.StatusOK, gin.H{"data": arr})
 }
 
 func (server *Server) handleContainerActions(c *gin.Context, action string) {

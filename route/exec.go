@@ -19,9 +19,9 @@ func (server *Server) handleExecRedirect(c *gin.Context) {
 	containerID := c.Param("cid")
 	execID := server.setContainerID(containerID)
 	if query := c.Request.URL.RawQuery; query != "" {
-		c.Redirect(302, "/exec/"+execID+"?"+c.Request.URL.RawQuery)
+		c.Redirect(302, "/console/exec/"+execID+"?"+c.Request.URL.RawQuery)
 	} else {
-		c.Redirect(302, "/exec/"+execID)
+		c.Redirect(302, "/console/exec/"+execID)
 	}
 }
 

@@ -12,7 +12,7 @@ var (
 
 var author = []*cli.Author{
 	&cli.Author{
-		Name:  "wrfly",
-		Email: "mr.wrfly@gmail.com",
+		Name:  "",
+		Email: "",
 	},
 }
